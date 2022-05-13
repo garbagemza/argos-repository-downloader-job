@@ -6,7 +6,8 @@ const { envcheck } = require('./utilities')
 
 const { 
 	getYourPathController
-} = require('./controllers')
+} = require('./controllers');
+const res = require('express/lib/response');
 
 const app = express()
 
@@ -16,6 +17,11 @@ envcheck(['PORT'])
 
 // add your middleware here
 app.get('/your/path', getYourPathController)
+
+app.get('/health', (req, res) => {
+	res.status(200)
+	res.send("OK")
+})
 
 // this middleware catches the unhandled paths
 app.use((req, res, next) => {
