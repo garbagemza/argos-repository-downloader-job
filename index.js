@@ -1,13 +1,12 @@
-require('dotenv').config();
+require('dotenv').config()
 const express = require('express')
 const createError = require('http-errors')
-
 const { envcheck } = require('./utilities')
+const { catchAll } = require('./middlewares')
 
 const { 
 	getYourPathController
 } = require('./controllers');
-const res = require('express/lib/response');
 
 const app = express()
 
@@ -23,10 +22,12 @@ app.get('/health', (req, res) => {
 	res.send("OK")
 })
 
-// this middleware catches the unhandled paths
 app.use((req, res, next) => {
 	res.status(404)
 	res.json(new createError(404, "Not found."))
 })
+
+// this middleware catches the unhandled paths
+catchAll(app)
 
 app.listen(process.env.PORT)
