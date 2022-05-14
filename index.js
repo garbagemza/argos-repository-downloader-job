@@ -1,8 +1,11 @@
 require('dotenv').config()
 const express = require('express')
-const createError = require('http-errors')
 const { envcheck } = require('./utilities')
-const { catchAll } = require('./middlewares')
+
+const {
+	catchAll,
+	health
+} = require('./middlewares')
 
 const { 
 	getYourPathController
@@ -17,10 +20,8 @@ envcheck(['PORT'])
 // add your middleware here
 app.get('/your/path', getYourPathController)
 
-app.get('/health', (req, res) => {
-	res.status(200)
-	res.send("OK")
-})
+// catch for liveness probe
+health(app)
 
 // this middleware catches the unhandled paths
 catchAll(app)
